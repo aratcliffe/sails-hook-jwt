@@ -17,7 +17,10 @@ module.exports = {
         password: {
             type: 'string',
             required: true
-        }
+        },
+        isValidPassword: function (password) {
+            return bcrypt.compare(password, this.password);
+        }        
     },
     
     beforeCreate: function (values, next) {
@@ -36,10 +39,6 @@ module.exports = {
                 return next();
             });
         });
-    },
-
-    isValidPassword: function (password) {
-        return bcrypt.compare(password, this.password);
     }
 };
 
