@@ -20,6 +20,9 @@ module.exports = {
                 user = rec;
                 return user.isValidPassword(password);
             })
+            .catch(function (err) {
+                return res.json(401, {err: {message: 'Invalid email address'}});
+            })        
             .then(function (valid) {  
                 if (valid) {
                     return TokenAuth.issueToken({sub: email, iat: +new Date()}, {algorithm: algorithm})
@@ -32,9 +35,6 @@ module.exports = {
                 } else {
                     res.json(401, {err: {message: 'Invalid password'}});
                 }
-            })
-            .catch(function (err) {
-                return res.json(401, {err: {message: 'Invalid email address'}});
             });
     },
 
