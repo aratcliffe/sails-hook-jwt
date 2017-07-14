@@ -1,0 +1,52 @@
+/**
+ * Token Auth Policy
+ */
+
+module.exports = function (req, res, next) {
+    var tokenName = sails.config.jwt ? sails.config.jwt.tokenName : 'token',
+        token;
+
+    if (req.headers && req.headers.authorization) {
+        token = extractTokenFromHeader(req.headers.authorization);
+        if (!token) {
+            return deny(req, res, 'Format is Authorization: Bearer [token]');
+        }
+    } else if (req.cookies && req.cookies[tokenName]) {
+        token = req.cookies[tokenName];
+    } else {
+        return deny(req, res, 'No token provided');
+    }
+
+    TokenAuth.verifyToken(token)
+        .then(function (decodedToken) {
+            req.token = decodedToken;
+            next();
+        })
+        .catch(function (err) {
+            return deny(req, res, 'Invalid token');
+        });
+};
+
+function extractTokenFromHeader (header) {
+    var parts = header.split(' '),
+        scheme, credentials, token;
+    
+    if (parts.length === 2) {
+        scheme = parts[0];
+        credentials = parts[1];
+
+        if (/^Bearer$/i.test(scheme)) {
+            token = credentials;
+        }
+    }
+
+    return token;
+}
+
+function deny (req, res, message) {
+    if (req.wantsJSON) {
+        res.json(401, {err: {message: message}});
+    } else {
+        res.redirect(sails.config.jwt.loginUrl);
+    }
+}
