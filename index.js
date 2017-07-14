@@ -13,7 +13,7 @@ module.exports = function (sails) {
                 algorithm: 'RS256', // Algorithm to use for signing the token
                 httpOnly: true, // Cookie will not be accessible through the browser
                 maxAge: 'P1D', // How long the token is valid for. Expressed as a moment duration (https://momentjs.com/docs/#/durations)
-                authCookieName: 'authenticated' // Accessible through the browser. Used to determine if user is logged in if token cookie is httpOnly
+                authCookieName: 'authenticated', // Accessible through the browser. Used to determine if user is logged in if token cookie is httpOnly
                 loginUrl: '/login' // If the client is not expecting a JSON response redirect to this URL when token authentication fails
             }
         },
