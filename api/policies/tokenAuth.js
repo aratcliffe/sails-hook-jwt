@@ -3,7 +3,7 @@
  */
 
 module.exports = function (req, res, next) {
-    var tokenName = sails.config.jwt ? sails.config.jwt.tokenName : 'token',
+    var tokenCookieName = sails.config.jwt.tokenCookieName,
         token;
 
     if (req.headers && req.headers.authorization) {
@@ -11,8 +11,8 @@ module.exports = function (req, res, next) {
         if (!token) {
             return deny(req, res, 'Format is Authorization: Bearer [token]');
         }
-    } else if (req.cookies && req.cookies[tokenName]) {
-        token = req.cookies[tokenName];
+    } else if (req.cookies && req.cookies[tokenCookieName]) {
+        token = req.cookies[tokenCookieName];
     } else {
         return deny(req, res, 'No token provided');
     }

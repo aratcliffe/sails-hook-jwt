@@ -4,7 +4,10 @@
 module.exports = function (sails) {
     var loader = require('sails-util-mvcsloader')(sails);
 
-    loader.configure();
+    loader.configure({
+        policies: __dirname + '/api/policies',
+        config: __dirname + '/config'
+    });
 
     return {
         defaults: {
@@ -18,7 +21,11 @@ module.exports = function (sails) {
             }
         },
         initialize: function (next) {
-            loader.adapt(function (err) {
+            loader.adapt({
+                controllers: __dirname + '/api/controllers',
+                models: __dirname + '/api/models',
+                services: __dirname + '/api/services'
+            }, function (err) {
                 return next(err);
             });
         }
