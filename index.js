@@ -2,13 +2,8 @@
  * Sails hook providing JSON Web Token authentication.
  */
 module.exports = function (sails) {
-    var loader = require('sails-util-mvcsloader')(sails);
-
-    loader.configure({
-        policies: __dirname + '/api/policies',
-        config: __dirname + '/config'
-    });
-
+    var loader;
+    
     return {
         defaults: {
             jwt: {
@@ -20,8 +15,15 @@ module.exports = function (sails) {
                 loginUrl: '/login' // If the client is not expecting a JSON response redirect to this URL when token authentication fails
             }
         },
+        configure: function () {
+            loader = require('sails-util-mvcsloader')(sails, sails.config[this.configKey].orm);
+            loader.configure({
+                policies: __dirname + '/api/policies',
+                config: __dirname + '/config'
+            });            
+        },
         initialize: function (next) {
-            loader.adapt({
+            loader.inject({
                 controllers: __dirname + '/api/controllers',
                 models: __dirname + '/api/models',
                 services: __dirname + '/api/services'
