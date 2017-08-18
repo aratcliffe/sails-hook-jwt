@@ -4,6 +4,7 @@
 
 module.exports = function (req, res, next) {
     var tokenCookieName = sails.config.jwt.tokenCookieName,
+        authCookieName = sails.config.jwt.authCookieName,
         token;
 
     if (req.headers && req.headers.authorization) {
@@ -19,10 +20,14 @@ module.exports = function (req, res, next) {
 
     TokenAuth.verifyToken(token)
         .then(function (decodedToken) {
-            req.token = decodedToken;
-            next();
+            User.findOne({email: decodedToken.sub})
+                .then(function (user) {
+                    req.user = user;
+                    next();
+                });            
         })
         .catch(function (err) {
+            res.clearCookie(authCookieName);
             return deny(req, res, 'Invalid token');
         });
 };
