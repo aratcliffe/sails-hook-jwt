@@ -11,7 +11,7 @@ module.exports = {
             tokenCookieName = sails.config.jwt.tokenCookieName,
             algorithm = sails.config.jwt.algorithm,
             httpOnly = sails.config.jwt.httpOnly,
-            maxAge = sails.config.jwt.maxAge,
+            maxAge = moment.duration(sails.config.jwt.maxAge).asMilliseconds(),
             authCookieName = sails.config.jwt.authCookieName,
             user;
 
@@ -24,8 +24,8 @@ module.exports = {
                 if (valid) {
                     return TokenAuth.issueToken({sub: email, iat: +new Date()}, {algorithm: algorithm})
                         .then(function (token) {
-                            res.cookie(authCookieName, new Date().getTime());
-                            res.cookie(tokenCookieName, token, {httpOnly: httpOnly, maxAge: moment.duration(maxAge).asMilliseconds()});                    
+                            res.cookie(authCookieName, new Date().getTime(), {maxAge: maxAge});
+                            res.cookie(tokenCookieName, token, {httpOnly: httpOnly, maxAge: maxAge});                    
                             delete user.password;
                             res.json({user: user, token: token});
                         });
