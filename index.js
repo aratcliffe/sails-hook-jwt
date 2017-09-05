@@ -16,7 +16,7 @@ module.exports = function (sails) {
             }
         },
         configure: function () {
-            loader = require('sails-util-mvcsloader')(sails, sails.config[this.configKey].orm);
+            loader = require('sails-util-mvcsloader')(sails);
             loader.configure({
                 policies: __dirname + '/api/policies',
                 config: __dirname + '/config'
