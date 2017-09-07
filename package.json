@@ -13,6 +13,6 @@
     "fs-extra": "^4.0.0",
     "jsonwebtoken": "^7.4.1",
     "moment": "^2.18.1",
-    "sails-util-mvcsloader": "^0.4.0"
+    "sails-util-mvcsloader": "github:aratcliffe/sails-util-mvcsloader"
   }
 }
