@@ -24,7 +24,7 @@ module.exports = {
                 if (valid) {
                     return TokenAuth.issueToken({sub: email, iat: +new Date()}, {algorithm: algorithm})
                         .then(function (token) {
-                            res.cookie(authCookieName, new Date().getTime(), {maxAge: maxAge});
+                            res.cookie(authCookieName, user.id, {maxAge: maxAge});
                             res.cookie(tokenCookieName, token, {httpOnly: httpOnly, maxAge: maxAge});                    
                             delete user.password;
                             res.json({user: user, token: token});
