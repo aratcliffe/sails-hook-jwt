@@ -20,12 +20,16 @@ module.exports = {
             unique: true
         },
         password: {
-            type: 'string',
-            required: true
+            type: 'string'
         },
         isValidPassword: function (password) {
             return bcrypt.compare(password, this.password);
-        }        
+        },
+        toJSON: function () {
+            var obj = this.toObject();
+            delete obj.password;
+            return obj;
+        }
     },
     
     beforeCreate: function (values, next) {

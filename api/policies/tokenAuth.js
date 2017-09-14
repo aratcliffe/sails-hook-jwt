@@ -20,6 +20,8 @@ module.exports = function (req, res, next) {
 
     TokenAuth.verifyToken(token)
         .then(function (decodedToken) {
+            sails.log.verbose('Decoded auth token: ', decodedToken);
+            
             User.findOne({email: decodedToken.sub})
                 .then(function (user) {
                     req.user = user;
