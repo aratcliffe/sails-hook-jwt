@@ -21,12 +21,15 @@ module.exports = function (req, res, next) {
     TokenAuth.verifyToken(token)
         .then(function (decodedToken) {
             sails.log.verbose('Decoded auth token: ', decodedToken);
-            
+
             User.findOne({email: decodedToken.sub})
                 .then(function (user) {
+                    if (!user) {
+                        return deny(req, res, 'User not found');
+                    }                    
                     req.user = user;
                     next();
-                });            
+                });
         })
         .catch(function (err) {
             res.clearCookie(authCookieName);
