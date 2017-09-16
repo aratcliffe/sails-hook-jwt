@@ -33,21 +33,25 @@ module.exports = {
     },
     
     beforeCreate: function (values, next) {
-        bcrypt.genSalt(10, function (err, salt) {
-            if (err) {
-                sails.log.error(err);
-                return next();
-            }
-
-            bcrypt.hash(values.password, salt, function (err, hash) {
+        if (values.password) {
+            bcrypt.genSalt(10, function (err, salt) {
                 if (err) {
                     sails.log.error(err);
                     return next();
                 }
-                values.password = hash;
-                return next();
+
+                bcrypt.hash(values.password, salt, function (err, hash) {
+                    if (err) {
+                        sails.log.error(err);
+                        return next();
+                    }
+                    values.password = hash;
+                    return next();
+                });
             });
-        });
+        } else {
+            next();
+        }
     }
 };
 
