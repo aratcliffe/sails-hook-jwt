@@ -23,6 +23,7 @@ module.exports = function (req, res, next) {
             sails.log.verbose('Decoded auth token: ', decodedToken);
 
             User.findOne({email: decodedToken.sub})
+                .populateAll()
                 .then(function (user) {
                     if (!user) {
                         return deny(req, res, 'User not found');
