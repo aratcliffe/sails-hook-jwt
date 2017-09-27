@@ -4,7 +4,6 @@
 
 module.exports = function (req, res, next) {
     var tokenCookieName = sails.config.jwt.tokenCookieName,
-        authCookieName = sails.config.jwt.authCookieName,
         token;
 
     if (req.headers && req.headers.authorization) {
@@ -33,7 +32,6 @@ module.exports = function (req, res, next) {
                 });
         })
         .catch(function (err) {
-            res.clearCookie(authCookieName);
             return deny(req, res, 'Invalid token');
         });
 };
