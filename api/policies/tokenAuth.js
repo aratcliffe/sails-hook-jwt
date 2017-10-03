@@ -6,7 +6,9 @@ module.exports = function (req, res, next) {
     var tokenCookieName = sails.config.jwt.tokenCookieName,
         token;
 
-    if (req.headers && req.headers.authorization) {
+    if (req.param('token')) {
+        token = req.param('token')
+    } else if (req.headers && req.headers.authorization) {
         token = extractTokenFromHeader(req.headers.authorization);
         if (!token) {
             return deny(req, res, 'Format is Authorization: Bearer [token]');
