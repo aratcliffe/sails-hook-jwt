@@ -8,6 +8,7 @@ module.exports = function (req, res, next) {
 
     if (req.param('token')) {
         token = req.param('token')
+        delete req.query.token;
     } else if (req.headers && req.headers.authorization) {
         token = extractTokenFromHeader(req.headers.authorization);
         if (!token) {
