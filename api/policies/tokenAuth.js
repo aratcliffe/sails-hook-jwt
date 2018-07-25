@@ -20,7 +20,7 @@ module.exports = function (req, res, next) {
         return deny(req, res, 'No token provided');
     }
 
-    TokenAuth.verifyToken(token)
+    TokenAuth.verifyToken(token, {algorithms: ['RS512']})
         .then(function (decodedToken) {
             sails.log.verbose('Decoded auth token: ', decodedToken);
 
